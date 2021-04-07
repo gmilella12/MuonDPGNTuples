@@ -82,7 +82,7 @@ class MuNtupleGEMMuonFiller : public MuNtupleTrackBaseFiller
   std::vector<bool>  m_isCSC;
   std::vector<bool> m_isME11;
   
-  std::vector<bool> m_propagatedisME11;
+  std::vector<bool> m_propagated_isME11;
 
   std::vector<bool>  m_isLoose;  // Loose muon ID
   std::vector<bool>  m_isMedium; // Medium muon ID
@@ -104,7 +104,14 @@ class MuNtupleGEMMuonFiller : public MuNtupleTrackBaseFiller
   std::vector<float> m_propagated_charge;
 
   std::vector<float> m_propagatedLoc_x;
+  std::vector<float> m_propagatedLoc_errX;
+  std::vector<float> m_propagatedGlb_errX;
   std::vector<float> m_propagatedLoc_y;
+  std::vector<float> m_propagatedLoc_errY;
+  std::vector<float> m_propagatedGlb_errY;
+  std::vector<float> m_propagatedGlb_phierr;
+  std::vector<float> m_propagatedGlb_rerr;
+
   std::vector<float> m_propagatedLoc_z;
   std::vector<float> m_propagatedLoc_r;
   std::vector<float> m_propagatedLoc_phi;
@@ -113,6 +120,21 @@ class MuNtupleGEMMuonFiller : public MuNtupleTrackBaseFiller
   std::vector<float> m_propagatedGlb_z;
   std::vector<float> m_propagatedGlb_r;
   std::vector<float> m_propagatedGlb_phi;
+
+
+  std::vector<float> m_propagated_EtaPartition_centerX;
+  std::vector<float> m_propagated_EtaPartition_centerY;
+  std::vector<std::pair<float,float>> m_propagated_EtaPartition_phiSpan;
+  std::vector<std::pair<float,float>> m_propagated_EtaPartition_rSpan;
+
+  std::vector<float> m_propagated_Innermost_x;
+  std::vector<float> m_propagated_Innermost_y;
+  std::vector<float> m_propagated_Innermost_z;
+
+  std::vector<float> m_propagated_Outermost_x;
+  std::vector<float> m_propagated_Outermost_y;
+  std::vector<float> m_propagated_Outermost_z;
+
   
 };
 

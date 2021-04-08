@@ -9,6 +9,7 @@ muNtupleProducer = cms.EDAnalyzer("MuNtupleProducer",
 
                                   ph1DtSegmentTag = cms.untracked.InputTag("dt4DSegments"),        
                                   ph2DtSegmentTag = cms.untracked.InputTag("none"),
+                                  isMC = cms.bool(False),
 
                                   ph1DTtTrigMode = cms.untracked.string('DTTTrigSyncFromDB'),
                                   gemDigiTag = cms.untracked.InputTag("muonGEMDigis"),

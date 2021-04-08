@@ -25,20 +25,23 @@ options.register('nEvents',
                  VarParsing.VarParsing.varType.int,
                  "Maximum number of processed events")
 
+options.register('isMC',
+                 True, #default value
+                 VarParsing.VarParsing.multiplicity.singleton,
+                 VarParsing.VarParsing.varType.bool,
+                 "Maximum number of processed events")
+
+
+
 options.register('inputFolder',
-                 #'/eos/cms//store/express/Commissioning2020/ExpressCosmics/FEVT/Express-v1/000/338/714/00000/',
-                 #'/lustre/cms/store/user/fsimone/Commissioning2020_ExpressCosmics_FEVT_DExpress-v1_337973',
-                 #'/afs/cern.ch/user/f/fsimone/public/Gabriele/',
-                 #'Run3Summer19GS-step2.root',
+                 #"/eos/user/f/fivone/GEMNTuples/MWGR/338714/0000/",
+                 #"/eos/cms//store/express/Commissioning2020/ExpressCosmics/FEVT/Express-v1/000/338/714/00000/",
                  "/eos/user/f/fivone/GEMNTuples/MC/Input/",
-                 #'/store/data/Commissioning2020/Cosmics/RAW-RECO/CosmicSP-PromptReco-v1/000/337/973/00000/',
-                 #'/store/data/Commissioning2020/Cosmics/RAW-RECO/CosmicTP-PromptReco-v1/000/337/973/00000/',
-                 #'/eos/cms/store/express/Commissioning2020/ExpressCosmics/FEVT/Express-v1/000/337/973/00000/',
-                 #'/afs/cern.ch/work/r/rosma/public/DTNtuples/MyCosmicProduction/',
-                 #'/afs/cern.ch/user/g/gmilella/CMSSW_11_2_0_pre2/src/DTNtuples/MyCosmicProduction/',
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "EOS folder with input files")
+
+
 
 options.register('secondaryInputFolder',
                  '', #default value
@@ -56,31 +59,35 @@ options.register('ntupleName',
 
 options.parseArguments()
 
+
 process = cms.Process("MUNTUPLES",eras.Run3)#Run2_2018)
 
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 
+
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True))
+
 numberOfThreads = cms.untracked.uint32(4)
 process.MessageLogger.cerr.FwkReport.reportEvery = 100
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(options.nEvents))
+
 #process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 
 process.GlobalTag.globaltag = cms.string(options.globalTag)
 
 process.source = cms.Source("PoolSource",
-                            
-        fileNames = cms.untracked.vstring(),
-        secondaryFileNames = cms.untracked.vstring()
-
+                            fileNames = cms.untracked.vstring(),
+                            secondaryFileNames = cms.untracked.vstring()
 )
+
 
 if "eos/cms" in options.inputFolder:
     files = subprocess.check_output(['ls', options.inputFolder])
     files = files.split()
-    process.source.fileNames = ["file:"+options.inputFolder+f for f in files]
+    print files[1:2]
+    process.source.fileNames = ["file:"+options.inputFolder+f for f in files[1:2]]
 
 elif "store/" in options.inputFolder:
     files = subprocess.check_output(['xrdfs', 'root://xrootd-cms.infn.it/', 'ls', options.inputFolder])
@@ -88,8 +95,8 @@ elif "store/" in options.inputFolder:
 
 else:
     files = subprocess.check_output(['ls', options.inputFolder])
-    print files
-    process.source.fileNames = ["file://" + options.inputFolder + "/" + f for f in files.split()]
+    files = files.split()
+    process.source.fileNames = ["file://" + options.inputFolder + "/" + f for f in files]
 
 if options.secondaryInputFolder != "" :
     files = subprocess.check_output(["ls", options.secondaryInputFolder])
@@ -111,6 +118,8 @@ process.load('TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorOp
 
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 process.load('MuDPGAnalysis.MuonDPGNtuples.muNtupleProducer_cfi')
+
+process.muNtupleProducer.isMC = cms.bool(options.isMC)
 
 process.p = cms.Path(#process.muonDTDigis + 
                       process.muNtupleProducer)

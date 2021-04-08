@@ -29,7 +29,7 @@
 
 MuNtupleConfig::MuNtupleConfig(const edm::ParameterSet & config) 
 { 
-  
+    
   edm::InputTag none = edm::InputTag("none");
   
   m_inputTags["ph1DtDigiTag"] = config.getUntrackedParameter<edm::InputTag>("ph1DtDigiTag", none);

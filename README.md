@@ -14,8 +14,10 @@ git clone https://github.com/gmilella12/MyMuonDPGNTuples.git MuDPGAnalysis/MuonD
 scram b -j 5
 
 cd MuDPGAnalysis/MuonDPGNtuples/test/
-cmsRun muDpgNtuples_cfg.py
+cmsRun muDpgNtuples_cfg.py isMC=<True or False. Default is True> nEvents=<integer number of evts to analyze>
 ```
+
+
 
 ## Overview of the ntuple structure:
 

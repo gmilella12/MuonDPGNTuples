@@ -86,8 +86,7 @@ process.source = cms.Source("PoolSource",
 if "eos/cms" in options.inputFolder:
     files = subprocess.check_output(['ls', options.inputFolder])
     files = files.split()
-    print files[1:2]
-    process.source.fileNames = ["file:"+options.inputFolder+f for f in files[1:2]]
+    process.source.fileNames = ["file:"+options.inputFolder+f for f in files]
 
 elif "store/" in options.inputFolder:
     files = subprocess.check_output(['xrdfs', 'root://xrootd-cms.infn.it/', 'ls', options.inputFolder])

@@ -134,6 +134,7 @@ void MuNtupleGEMMuonFiller::initialize()
   m_tree->Branch((m_label + "_propagatedGlb_errR").c_str(), &m_propagatedGlb_rerr);
   m_tree->Branch((m_label + "_propagatedGlb_errPhi").c_str(), &m_propagatedGlb_phierr);
 
+  m_tree->Branch((m_label + "_propagatedLoc_dirX").c_str(), &m_propagatedLoc_dirX);
 
   m_tree->Branch((m_label + "_propagated_EtaPartition_centerX").c_str(), &m_propagated_EtaPartition_centerX);
   m_tree->Branch((m_label + "_propagated_EtaPartition_centerY").c_str(), &m_propagated_EtaPartition_centerY);
@@ -199,6 +200,8 @@ void MuNtupleGEMMuonFiller::clear()
   m_propagatedGlb_errY.clear();
   m_propagatedGlb_rerr.clear();
   m_propagatedGlb_phierr.clear();
+
+  m_propagatedLoc_dirX.clear();
 
   m_propagatedGlb_x.clear();
   m_propagatedGlb_y.clear();
@@ -407,7 +410,6 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                                   //std::cout<<"Successfully propagated  on ="<< eta_partition->id()<<"\tGlobalPos "<<dest_global_pos <<std::endl;
                                                                   const GEMDetId&& gem_id = eta_partition->id();
                                                                   
-                                                                  
                                                                   //// PROPAGATED HIT ERROR EVALUATION
                                                                   // X,Y FROM QC8 Code
                                                                   double xx = dest_state.curvilinearError().matrix()(3,3);
@@ -421,7 +423,7 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                                   const GlobalError& dest_global_err = ErrorFrameTransformer().transform(dest_local_err, eta_partition->surface());
                                                                   const double dest_global_r_err = std::sqrt(dest_global_err.rerr(dest_global_pos));
                                                                   const double dest_global_phi_err = std::sqrt(dest_global_err.phierr(dest_global_pos));
-                                                                  
+
                                                                   m_propagated_isME11.push_back(isME11);
                                                       
                                                                   m_propagated_Innermost_x.push_back(transient_track.innermostMeasurementState().globalPosition().x());
@@ -459,6 +461,8 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                                   m_propagatedGlb_errY.push_back(dest_glob_error_y);
                                                                   m_propagatedGlb_rerr.push_back(dest_global_r_err);
                                                                   m_propagatedGlb_phierr.push_back(dest_global_phi_err);
+
+                                                                  m_propagatedLoc_dirX.push_back(dest_state.localDirection().x());
                                                                   
                                                                   m_propagated_region.push_back(gem_id.region());
                                                                   m_propagated_layer.push_back(gem_id.layer());

@@ -2,7 +2,8 @@
 
  Preliminary version of the GE11 ntuples, developed as a part of the CMS Muon DPGO common ntuples: https://gitlab.cern.ch/cms-muon-dpgo/muondpgntuples
 
-## Install and run the ntuples:
+## Installation:
+### Download 
 
 ```
 cmsrel CMSSW_11_1_4
@@ -10,14 +11,23 @@ cd CMSSW_11_1_4/src/
 cmsenv
 
 git clone https://github.com/gmilella12/MyMuonDPGNTuples.git MuDPGAnalysis/MuonDPGNtuples
-
-scram b -j 5
-
-cd MuDPGAnalysis/MuonDPGNtuples/test/
-cmsRun muDpgNtuples_cfg.py isMC=<True or False. Default is True> nEvents=<integer number of evts to analyze>
 ```
+### Compile
+```
+scram b -j 5
+```
+## Run the NTuplizer
+```
+cd MuDPGAnalysis/MuonDPGNtuples/test/
 
+cmsRun muDpgNtuples_cfg.py isMC=True  nEvents=-1 inputFile=Run3Summer19GS-step2_10.root
+```
+the current commit, provided with these options, will analyze:
+- The file `Run3Summer19GS-step2_10.root` located in the folder  `inputFolder` specified in the file `muDpgNtuples_cfg.py`
+- It will assume it is a MC datasample, so will fill the SimHit branches
+- Will analyze all the events in the file (nEvents = -1)
 
+Change the settings above based on your intended use
 
 ## Overview of the ntuple structure:
 

@@ -34,13 +34,21 @@ options.register('isMC',
 
 
 options.register('inputFolder',
+                 "/lustre/cms/store/user/gmilella/Run3Summer19GS-step0/CRAB3_MC_ZMuMu_RECO/201111_170703/0000/",
                  #"/eos/user/f/fivone/GEMNTuples/MWGR/338714/0000/",
                  #"/eos/cms//store/express/Commissioning2020/ExpressCosmics/FEVT/Express-v1/000/338/714/00000/",
-                 "/eos/user/f/fivone/GEMNTuples/MC/Input/",
+                 #"/eos/user/f/fivone/GEMNTuples/MC/Input/",
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "EOS folder with input files")
-
+options.register('inputFile',
+                 "",
+                 #"/eos/user/f/fivone/GEMNTuples/MWGR/338714/0000/",
+                 #"/eos/cms//store/express/Commissioning2020/ExpressCosmics/FEVT/Express-v1/000/338/714/00000/",
+                 #"/eos/user/f/fivone/GEMNTuples/MC/Input/",
+                 VarParsing.VarParsing.multiplicity.singleton,
+                 VarParsing.VarParsing.varType.string,
+                 "File name")
 
 
 options.register('secondaryInputFolder',
@@ -51,7 +59,7 @@ options.register('secondaryInputFolder',
 
 options.register('ntupleName',
                  #'./MuDPGNtuple_11_1_2_patch2.root',
-                 'ZMuMu_GEMNtuples.root',
+                 "GEMNtuples.root",
                  #'/lustre/cms/store/user/gmilella/Cosmics/CONDOR_gem_dpg_ntuple_mwgr4_run337973_eos/MuDPGNtuple_MWGR4eos.root',
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
@@ -88,6 +96,13 @@ if "eos/cms" in options.inputFolder:
     files = files.split()
     process.source.fileNames = ["file:"+options.inputFolder+f for f in files]
 
+elif "lustre/cms/store" in options.inputFolder:
+    files = subprocess.check_output(['ls', options.inputFolder])
+    files = files.split()
+    files = [ f for f in files if options.inputFile in f]
+    print files
+    process.source.fileNames = ["file://" + options.inputFolder + "/" + f for f in files]
+
 elif "store/" in options.inputFolder:
     files = subprocess.check_output(['xrdfs', 'root://xrootd-cms.infn.it/', 'ls', options.inputFolder])
     process.source.fileNames = ["root://xrootd-cms.infn.it//" +f for f in files.split()]
@@ -103,7 +118,7 @@ if options.secondaryInputFolder != "" :
  
 
 process.TFileService = cms.Service('TFileService',
-        fileName = cms.string(options.ntupleName)
+                                   fileName = cms.string("GEMntuples_"+options.inputFile)
     )
 
 
@@ -120,7 +135,6 @@ process.load('MuDPGAnalysis.MuonDPGNtuples.muNtupleProducer_cfi')
 
 process.muNtupleProducer.isMC = cms.bool(options.isMC)
 
-process.p = cms.Path(#process.muonDTDigis + 
-                      process.muNtupleProducer)
+process.p = cms.Path(process.muNtupleProducer)
 
 

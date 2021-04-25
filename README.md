@@ -17,15 +17,19 @@ git clone https://github.com/gmilella12/MyMuonDPGNTuples.git MuDPGAnalysis/MuonD
 scram b -j 5
 ```
 ## Run the NTuplizer
+- MC and MWGR Data use different **globalTag** and **CMSSW Release**. Edit config file accordingly!
+
+
 ```
 cd MuDPGAnalysis/MuonDPGNtuples/test/
 
-cmsRun muDpgNtuples_cfg.py isMC=True  nEvents=-1 inputFile=Run3Summer19GS-step2_10.root
+cmsRun muDpgNtuples_cfg.py isMC=True  nEvents=-1 inputFolder=/eos/cms//store/express/Commissioning2021/ExpressCosmics/FEVT/Express-v1/000/341/112/00000/
 ```
 the current commit, provided with these options, will analyze:
-- The file `Run3Summer19GS-step2_10.root` located in the folder  `inputFolder` specified in the file `muDpgNtuples_cfg.py`
+- The files in the folder `inputFolder`
 - It will assume it is a MC datasample, so will fill the SimHit branches
 - Will analyze all the events in the file (nEvents = -1)
+
 
 Change the settings above based on your intended use
 

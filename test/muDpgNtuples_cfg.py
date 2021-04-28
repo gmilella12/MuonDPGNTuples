@@ -10,13 +10,14 @@ options = VarParsing.VarParsing()
 
 options.register('globalTag',
                  '112X_dataRun3_Express_v5',
+                 ##"112X_mcRun3_2021_realistic_v14", For Shawn
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "Global Tag")
 
 options.register('nEvents',
                  #1000, #to run on a sub-sample
-                 -1, #default value
+                 500, #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.int,
                  "Maximum number of processed events")
@@ -30,11 +31,8 @@ options.register('isMC',
 
 
 options.register('inputFolder',
-                 #"/lustre/cms/store/user/gmilella/Run3Summer19GS-step0/CRAB3_MC_ZMuMu_RECO/201111_170703/0000/",
-                 #"/eos/user/f/fivone/GEMNTuples/MWGR/338714/0000/",
-                 "/eos/cms//store/express/Commissioning2021/ExpressCosmics/FEVT/Express-v1/000/341/112/00000/",
-                 #"/eos/cms//store/express/Commissioning2020/ExpressCosmics/FEVT/Express-v1/000/338/714/00000/",
-                 #"/eos/user/f/fivone/GEMNTuples/MC/Input/",
+                 "/eos/cms//store/express/Commissioning2021/ExpressCosmics/FEVT/Express-v1/000/341/343/00000/",
+                 #"/afs/cern.ch/user/s/szaleski/public/forFrancesco/",
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "EOS folder with input files")

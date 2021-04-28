@@ -113,6 +113,11 @@ void MuNtupleGEMMuonFiller::initialize()
   m_tree->Branch((m_label + "_propagated_phi").c_str(), &m_propagated_phi);
   m_tree->Branch((m_label + "_propagated_eta").c_str(), &m_propagated_eta);
   m_tree->Branch((m_label + "_propagated_charge").c_str(), &m_propagated_charge);
+  m_tree->Branch((m_label + "_propagated_TrackNormChi2").c_str(), &m_propagated_TrackNormChi2);
+
+  m_tree->Branch((m_label + "_propagated_numberOfValidPixelHits").c_str(), &m_propagated_numberOfValidPixelHits);
+  m_tree->Branch((m_label + "_propagated_innerTracker_ValidFraction").c_str(), &m_propagated_innerTracker_ValidFraction);
+  m_tree->Branch((m_label + "_propagated_numberOfValidTrackerHits").c_str(), &m_propagated_numberOfValidTrackerHits);
 
   m_tree->Branch((m_label + "_propagatedLoc_x").c_str(), &m_propagatedLoc_x);
   m_tree->Branch((m_label + "_propagatedLoc_y").c_str(), &m_propagatedLoc_y);
@@ -138,10 +143,10 @@ void MuNtupleGEMMuonFiller::initialize()
 
   m_tree->Branch((m_label + "_propagated_EtaPartition_centerX").c_str(), &m_propagated_EtaPartition_centerX);
   m_tree->Branch((m_label + "_propagated_EtaPartition_centerY").c_str(), &m_propagated_EtaPartition_centerY);
-  m_tree->Branch((m_label + "_propagated_EtaPartition_rSpan").c_str(), &m_propagated_EtaPartition_rSpan);
-  m_tree->Branch((m_label + "_propagated_EtaPartition_phiSpan").c_str(), &m_propagated_EtaPartition_phiSpan);
-
-
+  m_tree->Branch((m_label + "_propagated_EtaPartition_rMax").c_str(), &m_propagated_EtaPartition_rMax);
+  m_tree->Branch((m_label + "_propagated_EtaPartition_rMin").c_str(), &m_propagated_EtaPartition_rMin);
+  m_tree->Branch((m_label + "_propagated_EtaPartition_phiMax").c_str(), &m_propagated_EtaPartition_phiMax);
+  m_tree->Branch((m_label + "_propagated_EtaPartition_phiMin").c_str(), &m_propagated_EtaPartition_phiMin);
 
   m_tree->Branch((m_label + "_propagated_Innermost_x").c_str(), &m_propagated_Innermost_x);
   m_tree->Branch((m_label + "_propagated_Innermost_y").c_str(), &m_propagated_Innermost_y);
@@ -188,7 +193,12 @@ void MuNtupleGEMMuonFiller::clear()
   m_propagated_phi.clear();
   m_propagated_eta.clear();
   m_propagated_charge.clear();
+  m_propagated_TrackNormChi2.clear();
 
+  m_propagated_numberOfValidPixelHits.clear();
+  m_propagated_innerTracker_ValidFraction.clear();
+  m_propagated_numberOfValidTrackerHits.clear();
+                                                                  
   m_propagatedLoc_x.clear();
   m_propagatedLoc_y.clear();
   m_propagatedLoc_z.clear();
@@ -219,8 +229,10 @@ void MuNtupleGEMMuonFiller::clear()
 
   m_propagated_EtaPartition_centerX.clear();
   m_propagated_EtaPartition_centerY.clear();
-  m_propagated_EtaPartition_phiSpan.clear();
-  m_propagated_EtaPartition_rSpan.clear();
+  m_propagated_EtaPartition_rMax.clear();
+  m_propagated_EtaPartition_rMin.clear();
+  m_propagated_EtaPartition_phiMax.clear();
+  m_propagated_EtaPartition_phiMin.clear();
 
 
 }
@@ -311,11 +323,9 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
       
       if(!muon.outerTrack().isNull())   //STA Muon
           //if(!muon.globalTrack().isNull())   //GLB Muon
-	    {
-
+          {
             const reco::Track* track = muon.outerTrack().get();   //STA Muon 
             //const reco::Track* track = muon.globalTrack().get();  // GLB Muon
-	      
 	      if (track == nullptr) {
 		std::cout << "failed to get muon track" << std::endl;
                 continue;
@@ -355,6 +365,7 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
 	      
           auto recHitMu = outerTrackRef->recHitsBegin();
 	      auto recHitMuEnd = outerTrackRef->recHitsEnd();     //STA Muon
+
 
           //auto recHitMu = trackRef->recHitsBegin(); //GLB Muon
           //auto recHitMuEnd = trackRef->recHitsEnd();
@@ -435,8 +446,10 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                                   
                                                                   m_propagated_EtaPartition_centerX.push_back(eta_partition->position().x());
                                                                   m_propagated_EtaPartition_centerY.push_back(eta_partition->position().y());
-                                                                  m_propagated_EtaPartition_rSpan.push_back(eta_partition->surface().rSpan());
-                                                                  m_propagated_EtaPartition_phiSpan.push_back(eta_partition->surface().phiSpan());
+                                                                  m_propagated_EtaPartition_rMin.push_back(eta_partition->surface().rSpan().first);
+                                                                  m_propagated_EtaPartition_rMax.push_back(eta_partition->surface().rSpan().second);
+                                                                  m_propagated_EtaPartition_phiMin.push_back(eta_partition->surface().phiSpan().first);
+                                                                  m_propagated_EtaPartition_phiMax.push_back(eta_partition->surface().phiSpan().second);
                                                                   
                                                                   m_propagatedGlb_x.push_back(dest_global_pos.x());
                                                                   m_propagatedGlb_y.push_back(dest_global_pos.y());
@@ -448,6 +461,12 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                                   m_propagated_phi.push_back(muon.phi());
                                                                   m_propagated_eta.push_back(muon.eta());
                                                                   m_propagated_charge.push_back(muon.charge());
+                                                                  m_propagated_TrackNormChi2.push_back(transient_track.normalizedChi2());
+
+
+                                                                  m_propagated_numberOfValidPixelHits.push_back(muon.innerTrack()->hitPattern().numberOfValidPixelHits());
+                                                                  m_propagated_innerTracker_ValidFraction.push_back(muon.innerTrack()->validFraction());
+                                                                  m_propagated_numberOfValidTrackerHits.push_back(muon.innerTrack()->hitPattern().numberOfValidTrackerHits());
                                                                   
                                                                   m_propagatedLoc_x.push_back(dest_local_pos.x());                                
                                                                   m_propagatedLoc_y.push_back(dest_local_pos.y());

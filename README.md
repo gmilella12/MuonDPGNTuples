@@ -23,7 +23,7 @@ scram b -j 5
 ```
 cd MuDPGAnalysis/MuonDPGNtuples/test/
 
-cmsRun muDpgNtuples_cfg.py isMC=True  nEvents=-1 inputFolder=/eos/cms//store/express/Commissioning2021/ExpressCosmics/FEVT/Express-v1/000/341/112/00000/
+cmsRun muDpgNtuples_cfg.py isMC=False  nEvents=-1 inputFolder=/eos/cms//store/express/Commissioning2021/ExpressCosmics/FEVT/Express-v1/000/341/112/00000/
 ```
 the current commit, provided with these options, will analyze:
 - The files in the folder `inputFolder`

@@ -102,6 +102,11 @@ class MuNtupleGEMMuonFiller : public MuNtupleTrackBaseFiller
   std::vector<float> m_propagated_phi;
   std::vector<float> m_propagated_eta;
   std::vector<float> m_propagated_charge;
+  std::vector<float> m_propagated_TrackNormChi2;
+
+  std::vector<float> m_propagated_numberOfValidPixelHits;
+  std::vector<float> m_propagated_innerTracker_ValidFraction;
+  std::vector<float> m_propagated_numberOfValidTrackerHits;
 
   std::vector<float> m_propagatedLoc_x;
   std::vector<float> m_propagatedLoc_errX;
@@ -125,8 +130,10 @@ class MuNtupleGEMMuonFiller : public MuNtupleTrackBaseFiller
 
   std::vector<float> m_propagated_EtaPartition_centerX;
   std::vector<float> m_propagated_EtaPartition_centerY;
-  std::vector<std::pair<float,float>> m_propagated_EtaPartition_phiSpan;
-  std::vector<std::pair<float,float>> m_propagated_EtaPartition_rSpan;
+  std::vector<float> m_propagated_EtaPartition_phiMax;
+  std::vector<float> m_propagated_EtaPartition_phiMin;
+  std::vector<float> m_propagated_EtaPartition_rMax;
+  std::vector<float> m_propagated_EtaPartition_rMin;
 
   std::vector<float> m_propagated_Innermost_x;
   std::vector<float> m_propagated_Innermost_y;

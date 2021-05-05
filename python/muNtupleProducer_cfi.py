@@ -9,10 +9,13 @@ muNtupleProducer = cms.EDAnalyzer("MuNtupleProducer",
 
                                   ph1DtSegmentTag = cms.untracked.InputTag("dt4DSegments"),        
                                   ph2DtSegmentTag = cms.untracked.InputTag("none"),
+                                  isMC = cms.bool(False),
 
                                   ph1DTtTrigMode = cms.untracked.string('DTTTrigSyncFromDB'),
                                   gemDigiTag = cms.untracked.InputTag("muonGEMDigis"),
                                   gemRecHitTag = cms.untracked.InputTag("gemRecHits"),
+                                  gemSimHitTag = cms.untracked.InputTag("g4SimHits","MuonGEMHits"),
+                                  genParticlesTag = cms.untracked.InputTag("genParticles"),
                                   gemSegmentTag = cms.untracked.InputTag("gemSegments"),
                                   cscSegmentTag = cms.untracked.InputTag("cscSegments"),
                                   muonTag = cms.untracked.InputTag("muons"),
@@ -24,7 +27,8 @@ muNtupleProducer = cms.EDAnalyzer("MuNtupleProducer",
                                                                             doWirePropCorrection = cms.bool(False),
                                                                             doT0Correction = cms.bool(True),
                                                                             tTrigLabel = cms.string(''),
-                                                                            debug = cms.untracked.bool(False)
+                                                                            debug = cms.untracked.bool(False),
+                                                                            t0Label= cms.string('')
                                                                         )
 )
 

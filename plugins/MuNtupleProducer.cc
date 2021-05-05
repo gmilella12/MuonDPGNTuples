@@ -36,14 +36,15 @@
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMRecHitFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMSegmentFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMMuonFiller.h"
+#include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMSimHitFiller.h"
 
 #include <iostream>
 
 MuNtupleProducer::MuNtupleProducer( const edm::ParameterSet & config )
 {
-
   usesResource("TFileService");
   edm::Service<TFileService> fileService;
+  bool isMC = static_cast<bool>(config.getParameter<bool>("isMC"));
   m_tree = std::shared_ptr<TTree>(fileService->make<TTree>("MuDPGTree","Mu DPG Tree"));
   
   auto muon_service_parameter = config.getParameter<edm::ParameterSet>("ServiceParameters");
@@ -59,7 +60,11 @@ MuNtupleProducer::MuNtupleProducer( const edm::ParameterSet & config )
 
   //m_fillers.push_back(std::make_unique<MuNtupleDTSegmentFiller>(consumesCollector(), m_config, m_tree, "dtSeg",    MuNtupleDTSegmentFiller::Tag::PH1));
   //m_fillers.push_back(std::make_unique<MuNtupleDTSegmentFiller>(consumesCollector(), m_config, m_tree, "ph2DtSeg", MuNtupleDTSegmentFiller::Tag::PH2));
-  
+
+
+
+  if (isMC) m_fillers.push_back(std::make_unique<MuNtupleGEMSimHitFiller>(consumesCollector(), m_config, m_tree, "gemSimHit"));
+
   m_fillers.push_back(std::make_unique<MuNtupleGEMDigiFiller>(consumesCollector(), m_config, m_tree, "gemDigi"));
   
   m_fillers.push_back(std::make_unique<MuNtupleGEMRecHitFiller>(consumesCollector(), m_config, m_tree, "gemRecHit"));

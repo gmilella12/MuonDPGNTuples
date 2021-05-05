@@ -29,7 +29,7 @@
 
 MuNtupleConfig::MuNtupleConfig(const edm::ParameterSet & config) 
 { 
-  
+    
   edm::InputTag none = edm::InputTag("none");
   
   m_inputTags["ph1DtDigiTag"] = config.getUntrackedParameter<edm::InputTag>("ph1DtDigiTag", none);
@@ -48,8 +48,11 @@ MuNtupleConfig::MuNtupleConfig(const edm::ParameterSet & config)
 
   m_inputTags["gemDigiTag"] = config.getUntrackedParameter<edm::InputTag>("gemDigiTag", none);
   
-  m_inputTags["gemRecHitTag"] = config.getUntrackedParameter<edm::InputTag>("gemRecHitTag", 
-none);
+  m_inputTags["gemRecHitTag"] = config.getUntrackedParameter<edm::InputTag>("gemRecHitTag", none);
+
+  m_inputTags["gemSimHitTag"] = config.getUntrackedParameter<edm::InputTag>("gemSimHitTag",none);
+
+  m_inputTags["genParticlesTag"] = config.getUntrackedParameter<edm::InputTag>("genParticlesTag",none);
 
   m_inputTags["gemSegmentTag"] = config.getUntrackedParameter<edm::InputTag>("gemSegmentTag",none);
 
@@ -59,7 +62,7 @@ none);
 
   m_inputTags["primaryVerticesTag"] = config.getUntrackedParameter<edm::InputTag>("primaryVerticesTag",none);
 
-  m_inputTags["gemRecHitTag"] = config.getUntrackedParameter<edm::InputTag>("gemRecHitTag",none);
+
 
   residual_x_cut = static_cast<float>(config.getParameter<double>("residualXCut"));
 }

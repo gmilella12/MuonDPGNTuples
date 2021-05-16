@@ -127,6 +127,7 @@ void MuNtupleGEMMuonFiller::initialize()
 
   m_tree->Branch((m_label + "_propagatedLoc_errX").c_str(), &m_propagatedLoc_errX);
   m_tree->Branch((m_label + "_propagatedLoc_errY").c_str(), &m_propagatedLoc_errY);
+  m_tree->Branch((m_label + "_propagated_isGEM").c_str(), &m_propagated_isGEM);
 
   m_tree->Branch((m_label + "_propagatedGlb_x").c_str(), &m_propagatedGlb_x);
   m_tree->Branch((m_label + "_propagatedGlb_y").c_str(), &m_propagatedGlb_y);
@@ -206,6 +207,7 @@ void MuNtupleGEMMuonFiller::clear()
   m_propagatedLoc_phi.clear();
   m_propagatedLoc_errX.clear();
   m_propagatedLoc_errY.clear();
+  m_propagated_isGEM.clear();
   m_propagatedGlb_errX.clear();
   m_propagatedGlb_errY.clear();
   m_propagatedGlb_rerr.clear();
@@ -407,30 +409,30 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
 
                                                           // ORIGINAL SECTION
                                                           // The Z of the dest_state is fixed one the boundplane. x,y are actually evaluated by the propagator at that Z
-                                                          //const auto& dest_state = propagator_any->propagate(start_state,bound_plane);
-
-
-
-                                                          // NEW SECTION
-                                                          BoundPlane& etaPSur_translated_to_drift = const_cast<BoundPlane&>(bound_plane);
-
-                                                          int ch = eta_partition->id().chamber();
-                                                          int re = eta_partition->id().region();
-                                                          double displacement = 0;
-                                                              
-                                                          if (ch % 2 == 0)
-                                                              {
-                                                                  displacement = 0.55*re;
-                                                              }
-                                                          if (ch % 2 == 1)
-                                                              {
-                                                                  displacement = -0.55*re;
-                                                              }
-                                                          
-                                                          etaPSur_translated_to_drift.move(GlobalVector(0.,0.,displacement));
                                                           const auto& dest_state = propagator_any->propagate(start_state,bound_plane);
-                                                          etaPSur_translated_to_drift.move(GlobalVector(0.,0.,-displacement));
-                                                          // END NEW SECTION
+
+
+
+                                                          // // NEW SECTION UNDER CONSTRUCTION
+                                                          // BoundPlane& etaPSur_translated_to_drift = const_cast<BoundPlane&>(bound_plane);
+
+                                                          // int ch = eta_partition->id().chamber();
+                                                          // int re = eta_partition->id().region();
+                                                          // double displacement = 0;
+                                                              
+                                                          // if (ch % 2 == 0)
+                                                          //     {
+                                                          //         displacement = 0.55*re;
+                                                          //     }
+                                                          // if (ch % 2 == 1)
+                                                          //     {
+                                                          //         displacement = -0.55*re;
+                                                          //     }
+                                                          
+                                                          // etaPSur_translated_to_drift.move(GlobalVector(0.,0.,displacement));
+                                                          // const auto& dest_state = propagator_any->propagate(start_state,bound_plane);
+                                                          // etaPSur_translated_to_drift.move(GlobalVector(0.,0.,-displacement));
+                                                          // // END NEW SECTION
 
 
                                                           if (not dest_state.isValid())
@@ -508,6 +510,8 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                                   m_propagatedLoc_errX.push_back(dest_local_err.xx());
                                                                   m_propagatedLoc_errY.push_back(dest_local_err.yy());
                                                                   
+                                                                  m_propagated_isGEM.push_back(muon.isGEMMuon());
+                                                                  
                                                                   m_propagatedGlb_errX.push_back(dest_glob_error_x);
                                                                   m_propagatedGlb_errY.push_back(dest_glob_error_y);
                                                                   m_propagatedGlb_rerr.push_back(dest_global_r_err);
@@ -525,8 +529,7 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                               }// Propagation inside EtaPartition
                                                           else
                                                               {
-                                                                  std::cout<<"The propagated hit is not inside the eta partition"<<std::endl;
-                                                                  std::cin.ignore();
+                                                                  //std::cout<<"The propagated hit is not inside the eta partition"<<std::endl;
                                                               }
                                                       }//loop on EtaPartition
                                               } // Loop on chambers

@@ -9,8 +9,9 @@ import sys
 options = VarParsing.VarParsing()
 
 options.register('globalTag',
-                 '112X_dataRun3_Express_v5',
-                 ##"112X_mcRun3_2021_realistic_v14", For Shawn
+                 #'112X_dataRun3_Express_v5',
+                 ##"112X_mcRun3_2021_realistic_v14", ##For Shawn
+                 "112X_mcRun3_2021_realistic_v10", ## ZMuMu
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "Global Tag")
@@ -31,7 +32,7 @@ options.register('isMC',
 
 
 options.register('inputFolder',
-                 "/eos/cms//store/express/Commissioning2021/ExpressCosmics/FEVT/Express-v1/000/341/343/00000/",
+                 "/eos/user/f/fivone/GEMNTuples/MC/Input/",
                  #"/afs/cern.ch/user/s/szaleski/public/forFrancesco/",
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
@@ -45,7 +46,7 @@ options.register('secondaryInputFolder',
 
 options.register('ntupleName',
                  #'./MuDPGNtuple_11_1_2_patch2.root',
-                 "MuDPGNTuple_MWGR3_EXP_run341343.root",
+                 "MuDPGNTuple_ZMuMu.root",
                  #'/lustre/cms/store/user/gmilella/Cosmics/CONDOR_gem_dpg_ntuple_mwgr4_run337973_eos/MuDPGNtuple_MWGR4eos.root',
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,

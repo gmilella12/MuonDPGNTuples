@@ -114,6 +114,7 @@ class MuNtupleGEMMuonFiller : public MuNtupleTrackBaseFiller
   std::vector<float> m_propagatedLoc_y;
   std::vector<float> m_propagatedLoc_errY;
   std::vector<float> m_propagatedGlb_errY;
+  std::vector<float> m_propagated_isGEM;
   std::vector<float> m_propagatedGlb_phierr;
   std::vector<float> m_propagatedGlb_rerr;
   std::vector<float> m_propagatedLoc_dirX;

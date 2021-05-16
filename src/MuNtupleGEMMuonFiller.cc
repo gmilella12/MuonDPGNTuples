@@ -398,28 +398,59 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                           for (const GEMStation* station : gem_region->stations())
                               {
                                   for (const GEMSuperChamber* super_chamber : station->superChambers())
-                                      {
+                                      {                                                  
                                           for (const GEMChamber* chamber : super_chamber->chambers())
                                               {
                                                   for (const GEMEtaPartition* eta_partition : chamber->etaPartitions())
                                                       {
                                                           const BoundPlane& bound_plane = eta_partition->surface();
+
+                                                          // ORIGINAL SECTION
                                                           // The Z of the dest_state is fixed one the boundplane. x,y are actually evaluated by the propagator at that Z
+                                                          //const auto& dest_state = propagator_any->propagate(start_state,bound_plane);
+
+
+
+                                                          // NEW SECTION
+                                                          BoundPlane& etaPSur_translated_to_drift = const_cast<BoundPlane&>(bound_plane);
+
+                                                          int ch = eta_partition->id().chamber();
+                                                          int re = eta_partition->id().region();
+                                                          double displacement = 0;
+                                                              
+                                                          if (ch % 2 == 0)
+                                                              {
+                                                                  displacement = 0.55*re;
+                                                              }
+                                                          if (ch % 2 == 1)
+                                                              {
+                                                                  displacement = -0.55*re;
+                                                              }
+                                                          
+                                                          etaPSur_translated_to_drift.move(GlobalVector(0.,0.,displacement));
                                                           const auto& dest_state = propagator_any->propagate(start_state,bound_plane);
+                                                          etaPSur_translated_to_drift.move(GlobalVector(0.,0.,-displacement));
+                                                          // END NEW SECTION
+
+
                                                           if (not dest_state.isValid())
                                                               {
                                                                   std::cout << "failed to propagate" << std::endl;
                                                                   continue;
                                                               }
+
+
                                                           const GlobalPoint&& dest_global_pos = dest_state.globalPosition();
                                                           const LocalPoint&& local_point = eta_partition->toLocal(dest_global_pos);
                                                           const LocalPoint local_point_2d(local_point.x(), local_point.y(), 0.0f);
-
+                                                          
+                                                          
                                                           // Only x,y are actually "propagated". Z is fixed on the propagation plane
                                                           if (eta_partition->surface().bounds().inside(local_point_2d)) 
                                                               {
-                                                                  //std::cout<<"Successfully propagated  on ="<< eta_partition->id()<<"\tGlobalPos "<<dest_global_pos <<std::endl;
+
                                                                   const GEMDetId&& gem_id = eta_partition->id();
+                                                                  //std::cout<<"Successfully propagated  on ="<< eta_partition->id()<<"\tGlobalPos "<<dest_global_pos <<std::endl;
                                                                   
                                                                   //// PROPAGATED HIT ERROR EVALUATION
                                                                   // X,Y FROM QC8 Code
@@ -463,11 +494,12 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                                   m_propagated_charge.push_back(muon.charge());
                                                                   m_propagated_TrackNormChi2.push_back(transient_track.normalizedChi2());
 
-
-                                                                  m_propagated_numberOfValidPixelHits.push_back(muon.innerTrack()->hitPattern().numberOfValidPixelHits());
-                                                                  m_propagated_innerTracker_ValidFraction.push_back(muon.innerTrack()->validFraction());
-                                                                  m_propagated_numberOfValidTrackerHits.push_back(muon.innerTrack()->hitPattern().numberOfValidTrackerHits());
-                                                                  
+                                                                  if(!muon.innerTrack().isNull())
+                                                                      {
+                                                                          m_propagated_numberOfValidPixelHits.push_back(muon.innerTrack()->hitPattern().numberOfValidPixelHits());
+                                                                          m_propagated_innerTracker_ValidFraction.push_back(muon.innerTrack()->validFraction());
+                                                                          m_propagated_numberOfValidTrackerHits.push_back(muon.innerTrack()->hitPattern().numberOfValidTrackerHits());
+                                                                      }
                                                                   m_propagatedLoc_x.push_back(dest_local_pos.x());                                
                                                                   m_propagatedLoc_y.push_back(dest_local_pos.y());
                                                                   m_propagatedLoc_phi.push_back(dest_local_pos.phi());
@@ -491,6 +523,11 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                                   m_isinsideout.push_back(is_insideout);
                                                                   m_isincoming.push_back(is_incoming);
                                                               }// Propagation inside EtaPartition
+                                                          else
+                                                              {
+                                                                  std::cout<<"The propagated hit is not inside the eta partition"<<std::endl;
+                                                                  std::cin.ignore();
+                                                              }
                                                       }//loop on EtaPartition
                                               } // Loop on chambers
                                       }// Loop on superchambers

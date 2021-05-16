@@ -128,7 +128,6 @@ void MuNtupleGEMRecHitFiller::fill(const edm::Event & ev)
                     auto cluster_size = rechit->clusterSize();
                     auto firstClusterStrip = rechit->firstClusterStrip();
                     int bx = rechit->BunchX();
-                    std::cout<<"First Cluster strip = " << firstClusterStrip << std::endl;
                     m_rechit_cluster_size.push_back(cluster_size);
                     m_rechit_firstClusterStrip.push_back(firstClusterStrip);
                     m_rechit_bx.push_back(bx);

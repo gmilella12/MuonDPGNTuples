@@ -30,9 +30,9 @@ options.register('isMC',
                  "Maximum number of processed events")
 
 
-
 options.register('inputFolder',
                  "/eos/user/f/fivone/GEMNTuples/MC/Input/",
+                 #"/lustre/cms/store/user/gmilella/Run3Summer19GS-step0/CRAB3_MC_ZMuMu_RECO/201111_170703/0000/",
                  #"/afs/cern.ch/user/s/szaleski/public/forFrancesco/",
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
@@ -96,7 +96,7 @@ elif "store/" in options.inputFolder:
 else:
     files = subprocess.check_output(['ls', options.inputFolder])
     files = files.split()
-    process.source.fileNames = ["file://" + options.inputFolder + "/" + f for f in files]
+    process.source.fileNames = ["file://" + options.inputFolder + "/" + f for f in files[:1]]
 
 if options.secondaryInputFolder != "" :
     files = subprocess.check_output(["ls", options.secondaryInputFolder])

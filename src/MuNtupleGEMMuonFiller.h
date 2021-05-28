@@ -118,6 +118,8 @@ class MuNtupleGEMMuonFiller : public MuNtupleTrackBaseFiller
   std::vector<float> m_propagatedGlb_phierr;
   std::vector<float> m_propagatedGlb_rerr;
   std::vector<float> m_propagatedLoc_dirX;
+  std::vector<float> m_propagatedLoc_dirY;
+  std::vector<float> m_propagatedLoc_dirZ;
 
   std::vector<float> m_propagatedLoc_z;
   std::vector<float> m_propagatedLoc_r;
@@ -135,6 +137,11 @@ class MuNtupleGEMMuonFiller : public MuNtupleTrackBaseFiller
   std::vector<float> m_propagated_EtaPartition_phiMin;
   std::vector<float> m_propagated_EtaPartition_rMax;
   std::vector<float> m_propagated_EtaPartition_rMin;
+
+  std::vector<bool> m_propagated_isLoose;
+  std::vector<bool> m_propagated_isMedium;
+  std::vector<bool> m_propagated_isTight;
+
 
   std::vector<float> m_propagated_Innermost_x;
   std::vector<float> m_propagated_Innermost_y;

@@ -141,6 +141,8 @@ void MuNtupleGEMMuonFiller::initialize()
   m_tree->Branch((m_label + "_propagatedGlb_errPhi").c_str(), &m_propagatedGlb_phierr);
 
   m_tree->Branch((m_label + "_propagatedLoc_dirX").c_str(), &m_propagatedLoc_dirX);
+  m_tree->Branch((m_label + "_propagatedLoc_dirY").c_str(), &m_propagatedLoc_dirY);
+  m_tree->Branch((m_label + "_propagatedLoc_dirZ").c_str(), &m_propagatedLoc_dirZ);
 
   m_tree->Branch((m_label + "_propagated_EtaPartition_centerX").c_str(), &m_propagated_EtaPartition_centerX);
   m_tree->Branch((m_label + "_propagated_EtaPartition_centerY").c_str(), &m_propagated_EtaPartition_centerY);
@@ -148,6 +150,11 @@ void MuNtupleGEMMuonFiller::initialize()
   m_tree->Branch((m_label + "_propagated_EtaPartition_rMin").c_str(), &m_propagated_EtaPartition_rMin);
   m_tree->Branch((m_label + "_propagated_EtaPartition_phiMax").c_str(), &m_propagated_EtaPartition_phiMax);
   m_tree->Branch((m_label + "_propagated_EtaPartition_phiMin").c_str(), &m_propagated_EtaPartition_phiMin);
+
+
+  m_tree->Branch((m_label + "_propagated_LooseMu").c_str(), &m_propagated_isLoose);
+  m_tree->Branch((m_label + "_propagated_MediumMu").c_str(), &m_propagated_isMedium);
+  m_tree->Branch((m_label + "_propagated_TightMu").c_str(), &m_propagated_isTight);
 
   m_tree->Branch((m_label + "_propagated_Innermost_x").c_str(), &m_propagated_Innermost_x);
   m_tree->Branch((m_label + "_propagated_Innermost_y").c_str(), &m_propagated_Innermost_y);
@@ -214,6 +221,8 @@ void MuNtupleGEMMuonFiller::clear()
   m_propagatedGlb_phierr.clear();
 
   m_propagatedLoc_dirX.clear();
+  m_propagatedLoc_dirY.clear();
+  m_propagatedLoc_dirZ.clear();
 
   m_propagatedGlb_x.clear();
   m_propagatedGlb_y.clear();
@@ -235,6 +244,11 @@ void MuNtupleGEMMuonFiller::clear()
   m_propagated_EtaPartition_rMin.clear();
   m_propagated_EtaPartition_phiMax.clear();
   m_propagated_EtaPartition_phiMin.clear();
+
+  m_propagated_isLoose.clear();
+  m_propagated_isMedium.clear();
+  m_propagated_isTight.clear();
+
 
 
 }
@@ -413,7 +427,7 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
 
 
 
-                                                          // // NEW SECTION UNDER CONSTRUCTION
+                                                          // NEW SECTION UNDER CONSTRUCTION
                                                           // BoundPlane& etaPSur_translated_to_drift = const_cast<BoundPlane&>(bound_plane);
 
                                                           // int ch = eta_partition->id().chamber();
@@ -422,17 +436,17 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                               
                                                           // if (ch % 2 == 0)
                                                           //     {
-                                                          //         displacement = 0.55*re;
+                                                          //         displacement = -0.55*re;
                                                           //     }
                                                           // if (ch % 2 == 1)
                                                           //     {
-                                                          //         displacement = -0.55*re;
+                                                          //         displacement = 0.55*re;
                                                           //     }
                                                           
                                                           // etaPSur_translated_to_drift.move(GlobalVector(0.,0.,displacement));
                                                           // const auto& dest_state = propagator_any->propagate(start_state,bound_plane);
                                                           // etaPSur_translated_to_drift.move(GlobalVector(0.,0.,-displacement));
-                                                          // // END NEW SECTION
+                                                          // END NEW SECTION
 
 
                                                           if (not dest_state.isValid())
@@ -512,12 +526,18 @@ void MuNtupleGEMMuonFiller::fill_new(const edm::Event & ev, const edm::EventSetu
                                                                   
                                                                   m_propagated_isGEM.push_back(muon.isGEMMuon());
                                                                   
+                                                                  m_propagated_isLoose.push_back(muon.passed(reco::Muon::CutBasedIdLoose));
+                                                                  m_propagated_isMedium.push_back(muon.passed(reco::Muon::CutBasedIdMedium));
+                                                                  m_propagated_isTight.push_back(muon.passed(reco::Muon::CutBasedIdTight));
+                                                                  
                                                                   m_propagatedGlb_errX.push_back(dest_glob_error_x);
                                                                   m_propagatedGlb_errY.push_back(dest_glob_error_y);
                                                                   m_propagatedGlb_rerr.push_back(dest_global_r_err);
                                                                   m_propagatedGlb_phierr.push_back(dest_global_phi_err);
 
                                                                   m_propagatedLoc_dirX.push_back(dest_state.localDirection().x());
+                                                                  m_propagatedLoc_dirY.push_back(dest_state.localDirection().y());
+                                                                  m_propagatedLoc_dirZ.push_back(dest_state.localDirection().z());
                                                                   
                                                                   m_propagated_region.push_back(gem_id.region());
                                                                   m_propagated_layer.push_back(gem_id.layer());

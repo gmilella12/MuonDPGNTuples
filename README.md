@@ -6,11 +6,11 @@
 ### Download 
 
 ```
-cmsrel CMSSW_11_1_4
-cd CMSSW_11_1_4/src/
+cmsrel CMSSW_11_2_4
+cd CMSSW_11_2_4/src/
 cmsenv
 
-git clone https://github.com/gmilella12/MyMuonDPGNTuples.git MuDPGAnalysis/MuonDPGNtuples
+git clone --branch myDev https://github.com/fraivone/MuonDPGNTuples.git MuDPGAnalysis/MuonDPGNtuples
 ```
 ### Compile
 ```
@@ -172,9 +172,11 @@ A complete example showing how to include phase-1 and phase-2 DT digis is availa
                         mu_propagatedLoc_y (TBranchElement)
                         mu_propagatedLoc_z (TBranchElement)
                         mu_propagatedLoc_r (TBranchElement)
+                        m_propagated_isGEM (TBranchElement)
                         mu_propagatedLoc_phi (TBranchElement)
                         mu_propagatedLoc_errX (TBranchElement)
                         mu_propagatedLoc_errY (TBranchElement)
+                        mu_propagated_isGEM (TBranchElement)
                         mu_propagatedGlb_x (TBranchElement)
                         mu_propagatedGlb_y (TBranchElement)
                         mu_propagatedGlb_z (TBranchElement)

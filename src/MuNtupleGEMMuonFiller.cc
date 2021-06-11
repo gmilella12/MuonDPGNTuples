@@ -318,8 +318,8 @@ void MuNtupleGEMMuonFiller::fill(const edm::Event & ev)
           isCSC = false;
           isME11 = false;
 
-	  m_isCSC.push_back(isCSC);
-	  m_isME11.push_back(isME11);
+	  //m_isCSC.push_back(isCSC);
+	  //m_isME11.push_back(isME11);
 
 	  
 	  if(!muon.outerTrack().isNull())   //STA muon

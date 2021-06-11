@@ -30,7 +30,7 @@ options.register('isMC',
                  "Maximum number of processed events")
 
 options.register('inputFolder',
-                 #'/lustre/cms/store/user/gmilella/MCCosmics_0T_10M/CRAB3_MC_Cosmics_RECOCOSMICS_0T_10M/210309_112327/0000',
+                 '/lustre/cms/store/user/gmilella/MCCosmics_0T_10M/CRAB3_MC_Cosmics_RECOCOSMICS_0T_10M/210309_112327/0000',
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "EOS folder with input files")

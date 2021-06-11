@@ -10,8 +10,7 @@ cmsrel CMSSW_11_2_3  (cmsrel CMSSW_11_2_0_pre8_Patatrack for MC)
 cd CMSSW_11_2_3/src/  (cmsrel CMSSW_11_2_0_pre8_Patatrack/src/ for MC)
 cmsenv
 
-git clone git@github.com:gmilella12/MuonDPGNTuples.git
-
+git clone git@github.com:gmilella12/MuonDPGNTuples.git MuDPGAnalysis/MuonDPGNtuples
 
 ### Compile
 scram b -j 5
@@ -20,7 +19,7 @@ scram b -j 5
 - MC and MWGR Data use different **globalTag** and **CMSSW Release**. Edit config file accordingly!
 
 cd MuDPGAnalysis/MuonDPGNtuples/test/
-cmsRun muDpgNtuples_cfg.py isMC=False  nEvents=-1 inputFolder=/eos/cms//store/express/Commissioning2021/ExpressCosmics/FEVT/Express-v1/000/341/112/00000/
+cmsRun muDpgNtuples_cfg.py
 
 the current commit, provided with these options, will analyze:
 - The files in the folder `inputFolder`
